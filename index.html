@@ -1,112 +1,71 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AAHA Music Player</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #000;
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 
-        .player-container {
-            display: flex;
-            align-items: center;
-            background-color: #111;
-            padding: 12px 18px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            max-width: 600px;
-            width: 100%;
-            box-sizing: border-box;
-            font-family: sans-serif;
-        }
+.player-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #111;
+    padding: 12px 18px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    max-width: 600px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
 
-        .logo {
-            width: 50px;
-            height: auto;
-            margin-right: 15px;
-        }
+.logo {
+    width: 50px;
+    height: 50px;
+    background-image: url('https://ucef164fa1dc9a53c9f53f4404a7.previews.dropboxusercontent.com/p/thumb/ACzJPug-DSJTcAatCbxperXxkNkmYAJcp4so10kCVhfFBAPXqD3LxGqhuy4PE6vfX7sCUwgvX2smMdSFTTulAhmfnWcT7f-69pilcWD2Ocd-gUXpMZW4SwCARkyC_6EtVU7fLgpHX1Cy4LE9T692NFQXwRzE49oNYzv1Br_vp8gYq0MNW-2HON8RsmHMpei9gP0Sk5_d0mLzyFQyT_r2rqBIVnk9-D6-u6smX4FwueLw8302klneYWED2F0f9iN027rGLWH9wI9xV86NRpB9AYswC-4raYWpLB5M-BPYwtFTQ0kIsKVW7zIf5gKTBNUr2LD3NRLEM20sOCM43sdzZQNTGWHs2ftFgfQEbuK1LknjCRArguHE56sG0mfopVckFTc/p.png?is_prewarmed=true');
+    background-size: cover;
+    background-position: center;
+    margin-right: 15px;
+    pointer-events: none; /* 클릭 방지 */
+}
 
-        iframe {
-            width: 100%;
-            height: 60px;
-            border-radius: 5px;
-            border: none;
-        }
+iframe {
+    width: 100%;
+    height: 60px;
+    border-radius: 5px;
+    border: none;
+}
 
-        .controls {
-            display: flex;
-            flex-direction: column;
-            margin-left: 10px;
-            color: white;
-        }
+.controls {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    color: white;
+    width: 100%;
+}
 
-        button {
-            background-color: #333;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            margin-top: 10px;
-        }
+button {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
 
-        button:hover {
-            background-color: #555;
-        }
+button:hover {
+    background-color: #555;
+}
 
-        .time {
-            font-size: 12px;
-        }
-
-        input[type="range"] {
-            width: 100%;
-            background-color: #444;
-            border-radius: 5px;
-            margin-top: 5px;
-        }
-    </style>
-</head>
-<body>
-    <div class="player-container">
-        <!-- AAHA 로고 -->
-        <img src="https://ucef164fa1dc9a53c9f53f4404a7.previews.dropboxusercontent.com/p/thumb/ACzJPug-DSJTcAatCbxperXxkNkmYAJcp4so10kCVhfFBAPXqD3LxGqhuy4PE6vfX7sCUwgvX2smMdSFTTulAhmfnWcT7f-69pilcWD2Ocd-gUXpMZW4SwCARkyC_6EtVU7fLgpHX1Cy4LE9T692NFQXwRzE49oNYzv1Br_vp8gYq0MNW-2HON8RsmHMpei9gP0Sk5_d0mLzyFQyT_r2rqBIVnk9-D6-u6smX4FwueLw8302klneYWED2F0f9iN027rGLWH9wI9xV86NRpB9AYswC-4raYWpLB5M-BPYwtFTQ0kIsKVW7zIf5gKTBNUr2LD3NRLEM20sOCM43sdzZQNTGWHs2ftFgfQEbuK1LknjCRArguHE56sG0mfopVckFTc/p.png?is_prewarmed=true" alt="AAHA Logo" class="logo">
-
-        <!-- 유튜브 음원 오디오 플레이어 (아이프레임 사용) -->
-        <iframe src="https://www.youtube.com/embed/VIDEO_ID?autoplay=1&loop=1&playlist=VIDEO_ID&controls=0&modestbranding=1&showinfo=0&autohide=1&mute=0&iv_load_policy=3" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        
-        <!-- 시간과 볼륨 조정 UI -->
-        <div class="controls">
-            <span class="time">00:00</span> <!-- 현재 시간 표시 -->
-            <input type="range" min="0" max="100" value="100"> <!-- 볼륨 조정 -->
-            <button id="play-btn">▶</button>
-        </div>
-    </div>
-
-    <script>
-        // 스크립트 없이 유튜브 음원의 실제 플레이어 컨트롤을 제어할 수 없으므로, 버튼 및 슬라이더 UI만 처리
-        var playButton = document.getElementById("play-btn");
-        var iframe = document.querySelector("iframe");
-
-        playButton.addEventListener("click", function() {
-            var src = iframe.src;
-            if (src.indexOf('autoplay=1') === -1) {
-                iframe.src += "&autoplay=1"; // 음원 자동 재생
-                playButton.textContent = "⏸"; // 일시정지 버튼으로 변경
-            } else {
-                iframe.src = iframe.src.replace("&autoplay=1", ""); // 자동 재생 취소
-                playButton.textContent = "▶"; // 재생 버튼으로 변경
-            }
-        });
-    </script>
-</body>
-</html>
+input[type="range"] {
+    width: 100%;
+    background-color: #444;
+    border-radius: 5px;
+    margin-top: 5px;
+}
