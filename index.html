@@ -3,112 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AAHA Music Player</title>
+    <title>유튜브 오디오 커스텀 플레이어</title>
     <style>
+        /* 기본 스타일링 */
         body {
-            margin: 0;
-            padding: 0;
-            background-color: #000;
-            color: #fff;
+            background-color: #111;
+            color: white;
+            font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
         }
 
+        /* 플레이어 컨테이너 스타일 */
         .player-container {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            background-color: #111;
+            background: #111;
             padding: 12px 18px;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            max-width: 600px;
-            width: 100%;
-            box-sizing: border-box;
-            font-family: sans-serif;
+            width: 600px;
+            margin: 20px auto;
         }
 
-        /* 로고 이미지 (CSS로 처리) */
-        .logo {
-            width: 50px;
-            height: 50px;
-            background-image: url('https://ucef164fa1dc9a53c9f53f4404a7.previews.dropboxusercontent.com/p/thumb/ACzJPug-DSJTcAatCbxperXxkNkmYAJcp4so10kCVhfFBAPXqD3LxGqhuy4PE6vfX7sCUwgvX2smMdSFTTulAhmfnWcT7f-69pilcWD2Ocd-gUXpMZW4SwCARkyC_6EtVU7fLgpHX1Cy4LE9T692NFQXwRzE49oNYzv1Br_vp8gYq0MNW-2HON8RsmHMpei9gP0Sk5_d0mLzyFQyT_r2rqBIVnk9-D6-u6smX4FwueLw8302klneYWED2F0f9iN027rGLWH9wI9xV86NRpB9AYswC-4raYWpLB5M-BPYwtFTQ0kIsKVW7zIf5gKTBNUr2LD3NRLEM20sOCM43sdzZQNTGWHs2ftFgfQEbuK1LknjCRArguHE56sG0mfopVckFTc/p.png?is_prewarmed=true');
-            background-size: cover;
-            background-position: center;
+        /* 이미지 스타일 */
+        .player-container img {
             margin-right: 15px;
-            pointer-events: none; /* 클릭 방지 */
+            height: 18px;
+            pointer-events: none;
         }
 
-        iframe {
-            width: 100%;
-            height: 60px;
-            border-radius: 5px;
-            border: none;
-        }
-
-        .controls {
-            display: flex;
-            flex-direction: column;
-            margin-top: 10px;
-            color: white;
-            width: 100%;
-        }
-
-        button {
-            background-color: #333;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background-color: #555;
-        }
-
-        input[type="range"] {
-            width: 100%;
-            background-color: #444;
-            border-radius: 5px;
-            margin-top: 5px;
+        /* 오디오 플레이어 스타일 */
+        audio {
+            flex: 1;
+            outline: none;
+            filter: invert(1) grayscale(1) brightness(1.2);
+            height: 36px;
         }
     </style>
 </head>
 <body>
     <div class="player-container">
-        <!-- AAHA 로고 이미지 (CSS에서 처리됨) -->
-        <div class="logo"></div>
-
-        <!-- 유튜브 음원 오디오 플레이어 (아이프레임 사용) -->
-        <iframe src="https://www.youtube.com/embed/VIDEO_ID?autoplay=1&loop=1&playlist=VIDEO_ID&controls=0&modestbranding=1&showinfo=0&autohide=1&mute=0&iv_load_policy=3" frameborder="0"></iframe>
-
-        <!-- 플레이어 UI (시간, 볼륨, 버튼) -->
-        <div class="controls">
-            <span class="time">00:00</span> <!-- 현재 시간 표시 -->
-            <input type="range" min="0" max="100" value="100" class="volume-slider"> <!-- 볼륨 조정 -->
-            <button id="play-btn">▶</button>
+        <div style="margin-right:15px;display:flex;align-items:center;margin-left:10px;">
+            <img src="https://t1.daumcdn.net/cafeattach/J9nt/c1adeee5806e7af02324214bb6ff042292a78a55?download" alt="AAHA">
         </div>
+        <audio controls loop>
+            <source src="https://www.dropbox.com/scl/fi/020b4d5jkbni1190a3cxg/.mp3?rlkey=fl7imgll6uuh3sict00dy1bvd&st=4vhr91pl&dl=1" type="audio/mp3">
+        </audio>
     </div>
 
-    <script>
-        var playButton = document.getElementById("play-btn");
-        var iframe = document.querySelector("iframe");
+    <!-- 유튜브 API 로드 -->
+    <script src="https://www.youtube.com/iframe_api"></script>
 
-        playButton.addEventListener("click", function() {
-            var src = iframe.src;
-            if (src.indexOf('autoplay=1') === -1) {
-                iframe.src += "&autoplay=1"; // 음원 자동 재생
-                playButton.textContent = "⏸"; // 일시정지 버튼으로 변경
-            } else {
-                iframe.src = iframe.src.replace("&autoplay=1", ""); // 자동 재생 취소
-                playButton.textContent = "▶"; // 재생 버튼으로 변경
+    <script>
+        var player;
+
+        // API 로드 후 자동 호출되는 함수
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '0', // 영상 크기 0으로 설정
+                width: '0',  // 영상 크기 0으로 설정
+                videoId: 'VIDEO_ID', // 여기에 유튜브 영상 ID를 입력하세요
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        // 플레이어가 준비되었을 때 자동 재생
+        function onPlayerReady(event) {
+            event.target.playVideo();
+        }
+
+        // 영상 상태 변경 시 호출되는 함수
+        function onPlayerStateChange(event) {
+            if (event.data == YT.PlayerState.ENDED) {
+                // 영상이 끝났을 때 실행되는 코드
             }
-        });
+        }
     </script>
 </body>
 </html>
